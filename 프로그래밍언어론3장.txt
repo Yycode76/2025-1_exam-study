@@ -1,0 +1,45 @@
+# 프로그래밍 언어론 
+문법이란?
+-> 프로그래밍 언어는 컴퓨터가 이해할 수 있도록 문장 구조가 정해져 있다 이 문장구조를 문법이라고 한다.
+ex
+-> 한국어: 주어 + 동사 == 프로그래밍 언어: 식별자 + 연산자 + 숫자
+
+BNF란?
+(Backus - Naur Form)는 문법을 표현하는 형식이다.
+ex
+-> <expr> -> <expr> + <term> | <term>
+   <term> -> <term> * <factor> | <factor>
+   <factor> -> (<expr>) | <id>
+   <id> -> A | B | C
+해석: <expr>은 식을 의미
+     <expr> + <term>은 A+B와 같은걸 만들수 있다
+     <term> * <factor>는 A * B 같은 걸 만들 수 있다
+
+이런 식으로 문장을 구성하는 규칙들을 단계적으로 정의한다.
+
+파스트리란?
+BNF 문법대로 만들어진 문장을 트리 구조로 보여주는 것.
+즉, 문장이 어떤 순서로 생성되었는지 시각적으로 표현한 것이다.
+ex
+-> A+B*C
+      <expr>
+       / | \
+   <expr> + <term>
+     |       |
+    A     <term> * <factor>
+              |       |
+              B       C
+
+유도란?
+문법의 시작 기호(예: <S> 또는 <assign>)에서 시작해서
+하나씩 치환하면서 전체 문장을 만들어 가는 과정을 유도이다.
+ex
+-> A=B+C
+<assign>
+→ <id> = <expr>
+→ A = <expr>
+→ A = <expr> + <term>
+→ A = <term> + <term>
+→ A = <factor> + <factor>
+→ A = <id> + <id>
+→ A = B + C

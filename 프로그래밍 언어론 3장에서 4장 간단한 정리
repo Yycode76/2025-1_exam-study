@@ -1,0 +1,85 @@
+✅ 2025.04.04 공부한 내용 정리
+
+1. 문법과 언어 L(G)
+- 문법 G로부터 유도할 수 있는 모든 문자열의 집합이 언어 L(G)
+- 예시:
+  문법:
+    S → (S) | a
+  생성 가능한 문자열:
+    a, (a), ((a)), (((a))) ...
+  → L(G) = { (ⁿa)ⁿ | n ≥ 0 }
+
+2. 유도 방식 (좌측/우측 유도)
+- 좌측 유도: 가장 왼쪽의 비터미널부터 치환
+- 우측 유도: 가장 오른쪽의 비터미널부터 치환
+- 유도 방식에 따라 파스 트리 구조가 달라짐
+
+3. Dangling Else 문제
+- 문법:
+    S → if E then S | if E then S else S
+- 애매한 예: if e1 then if e2 then s1 else s2
+  → else가 어떤 if에 속하는지 모호함
+- 해결 방법:
+    M → if E then M else M   // 완전히 매칭된 문장 (Matched)
+    U → if E then S          // else가 빠진 문장 (Unmatched)
+- 원칙: else는 항상 가장 가까운 if에 붙는다
+
+4. BNF vs EBNF
+- BNF: 반복 표현이 불편
+    <expr> → <expr> + <term> | <term>
+- EBNF: 반복은 { ... }, 선택은 [ ... ]
+    <expr> → <term> { + <term> }
+
+5. 구문 다이어그램
+- 생성 규칙을 시각적으로 표현한 것
+- 넌터미널: 사각형
+- 터미널: 원
+- 순서: 화살표
+- 반복은 루프 형태로 그림
+
+6. 파싱과 파서
+- 파싱: 입력이 문법에 맞는지 유도(검사)
+- 파서: 위 과정을 수행하는 프로그램
+- 재귀 하강 파서:
+    - 좌측 유도 방식 기반
+    - 넌터미널마다 하나의 함수 구현
+
+7. 수식 계산 예제
+문법:
+  <expr> → <term> { + <term> }
+  <term> → <factor> { * <factor> }
+  <factor> → number | ( <expr> )
+
+예시 코드:
+int expr() {
+    int result = term();
+    while (token == '+') {
+        match('+');
+        result += term();
+    }
+    return result;
+}
+
+8. 어휘 분석기 getToken()
+- 공백 문자 무시
+- 숫자면 number() 호출
+- 그 외에는 연산자 등 그대로 반환
+
+예시 코드:
+int getToken() {
+  while (true) {
+    ch = input.read();
+    if (ch == ' ' || ch == '\t' || ch == '\r') ;
+    else if (isdigit(ch)) {
+      value = number();
+      input.unread(ch);
+      return NUMBER;
+    } else return ch;
+  }
+}
+
+9. 수식 계산 예시
+>> 12 + 33       → 45
+>> 3 * 5 + 10    → 25
+>> (2 + 3) * 12  → 60
+>> 2 + 3 * 12    → 38
